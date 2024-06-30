@@ -5,6 +5,7 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import utils.IOSActions;
 
 public class AlertViews extends IOSActions {
     IOSDriver driver;
@@ -41,6 +42,6 @@ public class AlertViews extends IOSActions {
 
     public String getConfirmMessage(){
         confirmMenu.click();
-        return confirmMenu.getText();
+        return confirmMessage.getText();
     }
 }
