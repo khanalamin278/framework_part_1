@@ -15,6 +15,7 @@ public class CartPage extends AndroidActions {
 
     public CartPage(AndroidDriver driver){
         super(driver);
+
         this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver) , this);
     }

@@ -1,28 +1,36 @@
 package org.example;
 
 import com.google.common.collect.ImmutableMap;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.testng.annotations.*;
+
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import utils.AppiumUtils;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URI;
 import java.time.Duration;
 
 
-public class BaseTest {
+
+public class BaseTest extends AppiumUtils {
 
 
     public static AndroidDriver driver;
-    public static AppiumDriverLocalService service;
+    public AppiumDriverLocalService service;
     public FromPage fromPage;
+
+
 
     @BeforeClass //
     public void ConfigarAppium() throws MalformedURLException, URISyntaxException {
@@ -54,7 +62,7 @@ public class BaseTest {
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         fromPage = new FromPage(driver);
-        FromPage formPage = new FromPage(driver);
+
     }
 
 
@@ -93,7 +101,7 @@ public class BaseTest {
     }
 
     @AfterClass
-    public static void tearDown() {
+    public void tearDown() {
 //        driver.quit();
         service.stop();
     }

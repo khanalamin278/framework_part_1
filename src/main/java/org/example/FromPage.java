@@ -13,27 +13,31 @@ public class FromPage extends AndroidActions {
     AndroidDriver driver;
     public FromPage(AndroidDriver driver){
         super(driver);
+
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver) , this);
+        PageFactory.initElements(new AppiumFieldDecorator(driver) , this.driver);
     }
 
     @AndroidFindBy(id = "com.androidsample.generalstore:id/nameField")
-    private WebElement nameField;
+    public WebElement nameField;
 
     @AndroidFindBy(id = "com.androidsample.generalstore:id/radioMale")
-    private WebElement maleOption;
+    public WebElement maleOption;
 
     @AndroidFindBy(id = "com.androidsample.generalstore:id/radioFemale")
-    private WebElement femaleOption;
+    public WebElement femaleOption;
 
     @AndroidFindBy(id = "android:id/text1")
-    private WebElement countrySelection;
+    public WebElement countrySelection;
 
     @AndroidFindBy(id = "com.androidsample.generalstore:id/btnLetsShop")
-    private WebElement shopButton;
+    public WebElement shopButton;
 
     public void setNameField(String name){
-        nameField.sendKeys(name);
+        System.out.println(nameField);
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        driver.findElement(By.id("com.androidsample.generalstore:id/nameField")).sendKeys(name);
+        //nameField.sendKeys(name);
         driver.hideKeyboard();
     }
 
@@ -48,6 +52,7 @@ public class FromPage extends AndroidActions {
          countrySelection.click();
         scrollToText(countryName);
         driver.findElement(By.xpath("//android.widget.TextView[@text='"+countryName+"']")).click();
+        //driver.findElement(By.xpath("//android.widget.TextView[@resource-id='android:id/text1' and @text='"+countryName+"']")).click();
     }
 
     public ProductCatalogue submitFrom(){

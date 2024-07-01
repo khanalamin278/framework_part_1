@@ -11,7 +11,6 @@ public class HomePage extends IOSActions {
     IOSDriver driver;
     public HomePage(IOSDriver driver){
         super(driver);
-        this.driver = driver;
         PageFactory.initElements(new AppiumFieldDecorator(driver) , this);
    }
 

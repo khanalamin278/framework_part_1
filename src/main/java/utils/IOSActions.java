@@ -9,15 +9,17 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.example.BaseTest.driver;
+
 public class IOSActions extends AppiumUtils{
     IOSDriver driver;
 
     public IOSActions(IOSDriver driver){
-        super(driver);
+
         this.driver = driver;
     }
 
-    public void longPressAction(WebElement ele) {
+    public void longPressAction(WebElement ele, IOSDriver driver) {
         Map<String, Object> params = new HashMap<>();
         params.put("element", ((RemoteWebElement)ele).getId());
         params.put("duration",5);

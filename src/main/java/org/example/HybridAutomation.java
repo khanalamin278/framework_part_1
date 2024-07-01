@@ -1,41 +1,37 @@
 package org.example;
 
 import io.appium.java_client.AppiumBy;
-import io.appium.java_client.android.nativekey.AndroidKey;
-import io.appium.java_client.android.nativekey.KeyEvent;
-import org.junit.After;
+import io.appium.java_client.AppiumDriver;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.net.UrlChecker.TimeoutException;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import io.appium.java_client.android.AndroidDriver;
+import utils.AppiumUtils;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 
 public class HybridAutomation extends BaseTest {
 
     @BeforeMethod
-    public void startDriver() throws MalformedURLException, URISyntaxException {
-        setDriver();
+   public void startDriver() throws MalformedURLException, URISyntaxException {
+       setDriver();
     }
 
-    @Test
-    public void FillFormOne() throws InterruptedException {
-        fromPage.setNameField("Al amin khan");
-        fromPage.setGender("Male");
-        fromPage.setCountrySelection("Bangladesh");
+    @Test(dataProvider = "getData")
+    public void FillFormOne(HashMap<String, String> input) throws InterruptedException {
+        System.out.println(fromPage);
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        fromPage.setNameField(input.get("name"));
+        fromPage.setGender(input.get("gender"));
+        fromPage.setCountrySelection(input.get("country"));
         ProductCatalogue productCatalogue = fromPage.submitFrom();
         productCatalogue.addItemCartByIndex(0);
         productCatalogue.addItemCartByIndex(0);
@@ -57,36 +53,43 @@ public class HybridAutomation extends BaseTest {
 
     }
 
-
-    @Test
-    public void FillFormTwo() throws InterruptedException {
-        driver.findElement(By.id("android:id/text1")).click();
-        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Bangladesh\"))"));
-        driver.findElement(By.xpath("//android.widget.TextView[@text='Bangladesh']")).click();
-        driver.findElement(By.id("com.androidsample.generalstore:id/nameField")).sendKeys("Al amin khan");
-        driver.hideKeyboard();
-        driver.findElement(By.id("com.androidsample.generalstore:id/radioMale")).click();
-        driver.findElement(By.id("com.androidsample.generalstore:id/btnLetsShop")).click();
-        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Jordan 6 Rings\"))"));
-
-        int productCount = driver.findElements(By.id("com.androidsample.generalstore:id/productName")).size();
-        for (int i = 0; i < productCount; i++) {
-            String productName = driver.findElements(By.id("com.androidsample.generalstore:id/productName")).get(i).getText();
-            if (productName.equalsIgnoreCase("Jordan 6 Rings")) {
-                driver.findElements(By.id("com.androidsample.generalstore:id/productAddCart")).get(i).click();
-            }
-        }
-        driver.findElement(By.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
-
-        WebDriverWait wait = new WebDriverWait(driver , Duration.ofSeconds(5));
-
-        String lastPageProduct = driver.findElement(By.id("com.androidsample.generalstore:id/productName")).getText();
-        Assert.assertEquals(lastPageProduct , "Jordan 6 Rings");
-
-        Thread.sleep(3000);
+    @DataProvider
+    public Object[][] getData() throws IOException {
+        List<HashMap<String, String>> data = getJsonData(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//Json.json");
+        return new Object[][] {  {data.get(0)}, {data.get(1)}   };
     }
 
 
+
+    //    @Test
+//    public void FillFormTwo() throws InterruptedException {
+//        driver.findElement(By.id("android:id/text1")).click();
+//        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Bangladesh\"))"));
+//        driver.findElement(By.xpath("//android.widget.TextView[@text='Bangladesh']")).click();
+//        driver.findElement(By.id("com.androidsample.generalstore:id/nameField")).sendKeys("Al amin khan");
+//        driver.hideKeyboard();
+//        driver.findElement(By.id("com.androidsample.generalstore:id/radioMale")).click();
+//        driver.findElement(By.id("com.androidsample.generalstore:id/btnLetsShop")).click();
+//        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Jordan 6 Rings\"))"));
+//
+//        int productCount = driver.findElements(By.id("com.androidsample.generalstore:id/productName")).size();
+//        for (int i = 0; i < productCount; i++) {
+//            String productName = driver.findElements(By.id("com.androidsample.generalstore:id/productName")).get(i).getText();
+//            if (productName.equalsIgnoreCase("Jordan 6 Rings")) {
+//                driver.findElements(By.id("com.androidsample.generalstore:id/productAddCart")).get(i).click();
+//            }
+//        }
+//        driver.findElement(By.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
+//
+//        WebDriverWait wait = new WebDriverWait(driver , Duration.ofSeconds(5));
+//
+//        String lastPageProduct = driver.findElement(By.id("com.androidsample.generalstore:id/productName")).getText();
+//        Assert.assertEquals(lastPageProduct , "Jordan 6 Rings");
+//
+//        Thread.sleep(3000);
+//    }
+//
+//
     @AfterClass
     public static void startDriverStop() {
         driver.quit();
