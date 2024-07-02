@@ -1,64 +1,61 @@
 package org.example;
 
 import com.google.common.collect.ImmutableMap;
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
-import io.appium.java_client.service.local.AppiumServiceBuilder;
-
-import org.openqa.selenium.remote.RemoteWebElement;
+import org.junit.AfterClass;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-
-import org.testng.annotations.AfterClass;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.testng.annotations.BeforeClass;
 import utils.AppiumUtils;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URI;
 import java.time.Duration;
-
+import java.util.Properties;
 
 
 public class BaseTest extends AppiumUtils {
 
 
     public static AndroidDriver driver;
-    public AppiumDriverLocalService service;
+    public static AppiumDriverLocalService service;
     public FromPage fromPage;
 
 
 
     @BeforeClass //
-    public void ConfigarAppium() throws MalformedURLException, URISyntaxException {
-        service = new AppiumServiceBuilder()
-                //Appium code --> Appium server --> mobile.
-                .withAppiumJS(new File("C://Users//hp//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
-                .withIPAddress("127.0.0.1")
-                .usingPort(4723)
-                .build();
+    public void ConfigarAppium() throws IOException, URISyntaxException {
+        Properties prop = new Properties();
+        FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//resources//data.properties");
 
-        service.start();
+        prop.load(fis);
+        String ipAddress = prop.getProperty("ipAddress");
+        String port = prop.getProperty("port");
+
+        service = startAppiumServer(ipAddress, Integer.parseInt(port));
 
     }
 
     public void setDriver() throws MalformedURLException, URISyntaxException {
+        Properties prop = new Properties();
         UiAutomator2Options options = new UiAutomator2Options();
 
-        options.setDeviceName("Pixel 2 API 34");
+        options.setDeviceName(prop.getProperty("AndroidDeviceName"));
 
         //options.setChromedriverExecutable("C://Programming//QaWorks//khan//src//test//java//resource//chromedriver.exe");
 
-        options.setApp("D://shohag_dada//framework_part_1//src//test//java//org//example//pageObject//resources//General-Store.apk");
+        //options.setApp("D://shohag_dada//framework_part_1//src//test//java//org//example//pageObject//resources//General-Store.apk");
 
         //options.setApp("C://Programming//QaWorks//khan//src//test//java//resource//ApiDemos-debug.apk");
 
-//        options.setApp("C://Programming//QaWorks//khan//src//test//java//resource//General-Store.apk");
+        options.setApp("C://Programming//QaWorks//framework_part_1//src//test//java//org//example//pageObject//resources//General-Store.apk");
 
-        driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options);
+        driver = new AndroidDriver(service.getUrl(), options);
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         fromPage = new FromPage(driver);
@@ -101,7 +98,7 @@ public class BaseTest extends AppiumUtils {
     }
 
     @AfterClass
-    public void tearDown() {
+    public static void tearDown() {
 //        driver.quit();
         service.stop();
     }

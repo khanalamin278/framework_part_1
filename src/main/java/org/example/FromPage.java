@@ -15,7 +15,7 @@ public class FromPage extends AndroidActions {
         super(driver);
 
         this.driver = driver;
-        PageFactory.initElements(new AppiumFieldDecorator(driver) , this.driver);
+        PageFactory.initElements(new AppiumFieldDecorator(driver) , this);
     }
 
     @AndroidFindBy(id = "com.androidsample.generalstore:id/nameField")
@@ -34,7 +34,6 @@ public class FromPage extends AndroidActions {
     public WebElement shopButton;
 
     public void setNameField(String name){
-        System.out.println(nameField);
         nameField.sendKeys(name);
         driver.hideKeyboard();
     }

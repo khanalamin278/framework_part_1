@@ -6,6 +6,8 @@ package utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.apache.commons.io.FileUtils;
 
 
@@ -27,6 +29,8 @@ import java.util.List;
 
 public class AppiumUtils {
 
+    public  AppiumDriverLocalService service;
+
     public Double getFormattedAmount(String amount){
         Double price = Double.parseDouble(amount.substring(1));
         return price;
@@ -38,9 +42,23 @@ public class AppiumUtils {
     public List<HashMap<String, String>> getJsonData(String jsonFilePath) throws IOException {
         String jsonContent = FileUtils.readFileToString(new File(jsonFilePath), StandardCharsets.UTF_8);
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonContent, new TypeReference<List<HashMap<String, String>>>() {});
+        List<HashMap<String, String>> data = objectMapper.readValue(jsonContent, new TypeReference<List<HashMap<String, String>>>() {});
+        return data;
     }
 
+
+    public AppiumDriverLocalService startAppiumServer(String ipAddress, int port){
+        service = new AppiumServiceBuilder()
+                //Appium code --> Appium server --> mobile.
+                .withAppiumJS(new File("C://Users//hp//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
+                .withIPAddress(ipAddress)
+                .usingPort(port)
+                .build();
+
+        service.start();
+        return service;
+
+    }
 
 
 
