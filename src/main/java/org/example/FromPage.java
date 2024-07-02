@@ -35,9 +35,7 @@ public class FromPage extends AndroidActions {
 
     public void setNameField(String name){
         System.out.println(nameField);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        driver.findElement(By.id("com.androidsample.generalstore:id/nameField")).sendKeys(name);
-        //nameField.sendKeys(name);
+        nameField.sendKeys(name);
         driver.hideKeyboard();
     }
 

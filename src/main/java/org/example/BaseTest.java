@@ -52,7 +52,7 @@ public class BaseTest extends AppiumUtils {
 
         //options.setChromedriverExecutable("C://Programming//QaWorks//khan//src//test//java//resource//chromedriver.exe");
 
-        options.setApp("C://Programming//QaWorks//khan//src//test//java//resource//General-Store.apk");
+        options.setApp("D://shohag_dada//framework_part_1//src//test//java//org//example//pageObject//resources//General-Store.apk");
 
         //options.setApp("C://Programming//QaWorks//khan//src//test//java//resource//ApiDemos-debug.apk");
 
