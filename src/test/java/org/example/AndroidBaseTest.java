@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
-import org.junit.AfterClass;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import utils.AppiumUtils;
 
@@ -23,30 +23,9 @@ public class AndroidBaseTest extends AppiumUtils {
 
 
     public AndroidDriver driver;
-    public static AppiumDriverLocalService service;
+    public AppiumDriverLocalService service;
     public FromPage fromPage;
 
-
-    @BeforeClass
-    public void ConfigarAppium() throws IOException, URISyntaxException {
-        System.out.println("ConfigarAppium is called");
-        Properties prop = new Properties();
-        FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//resources//data.properties");
-
-        prop.load(fis);
-        String ipAddress = prop.getProperty("ipAddress");
-        String port = prop.getProperty("port");
-
-        System.out.println("Starting Appium server on IP: " + ipAddress + " Port: " + port);
-
-        service = startAppiumServer(ipAddress, Integer.parseInt(port));
-
-        if (service == null) {
-            System.out.println("Appium server could not be started. Service is null.");
-        } else {
-            System.out.println("Appium server started at: " + service.getUrl());
-        }
-    }
 
 //    @BeforeClass
 //    public void ConfigarAppium() throws IOException, URISyntaxException {
@@ -58,10 +37,29 @@ public class AndroidBaseTest extends AppiumUtils {
 //        String ipAddress = prop.getProperty("ipAddress");
 //        String port = prop.getProperty("port");
 //
-//        service = startAppiumServer(ipAddress, Integer.parseInt(port));
-//        System.out.println("Appium server started at: " + service.getUrl());
+//        System.out.println("Starting Appium server on IP: " + ipAddress + " Port: " + port);
 //
+//        service = startAppiumServer(ipAddress, Integer.parseInt(port));
+//
+//        if (service == null) {
+//            System.out.println("Appium server could not be started. Service is null.");
+//        } else {
+//            System.out.println("Appium server started at: " + service.getUrl());
+//        }
 //    }
+
+    @BeforeClass(alwaysRun = true)
+    public void ConfigarAppium() throws IOException, URISyntaxException {
+        Properties prop = new Properties();
+        FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//resources//data.properties");
+
+        prop.load(fis);
+        String ipAddress = prop.getProperty("ipAddress");
+        String port = prop.getProperty("port");
+
+        service = startAppiumServer(ipAddress, Integer.parseInt(port));
+        System.out.println(service);
+   }
 
     public void setDriver() throws MalformedURLException, URISyntaxException{
         Properties prop = new Properties();
@@ -120,9 +118,10 @@ public class AndroidBaseTest extends AppiumUtils {
     }
 
     @AfterClass
-    public static void tearDown() {
-//        driver.quit();
+    public  void tearDown()
+    {
         service.stop();
+        System.out.println("AfterClass");
     }
 
 }

@@ -15,10 +15,10 @@ import java.util.List;
 
 public class HybridAutomation extends AndroidBaseTest {
 
-    @BeforeClass
-    public void setUp() throws IOException, URISyntaxException {
-        ConfigarAppium();
-    }
+//    @BeforeClass
+//    public void setUp() throws IOException, URISyntaxException {
+//        ConfigarAppium();
+//    }
 
     @BeforeMethod(alwaysRun = true)
     public void startDriver() throws MalformedURLException, URISyntaxException {
@@ -30,6 +30,7 @@ public class HybridAutomation extends AndroidBaseTest {
 //       setDriver();
 //    }
 
+    //@Test(dataProvider = "getData", groups = {"Smoke"})
     @Test(dataProvider = "getData", groups = {"Smoke"})
     public void FillFormOne(HashMap<String, String> input) throws InterruptedException {
         fromPage.setNameField(input.get("name"));
@@ -72,7 +73,7 @@ public class HybridAutomation extends AndroidBaseTest {
 
 
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void startDriverStop() {
         driver.quit();
     }
