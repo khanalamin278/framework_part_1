@@ -56,6 +56,7 @@ public class FromPage extends AndroidActions {
         shopButton.click();
         return new ProductCatalogue(driver);
     }
+
 }
 
 /*

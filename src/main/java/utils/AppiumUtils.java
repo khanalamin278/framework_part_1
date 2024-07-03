@@ -1,21 +1,13 @@
 package utils;
 
 
-
-
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.apache.commons.io.FileUtils;
-
-
-
-import io.appium.java_client.AppiumDriver;
-
-
-
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -36,9 +28,6 @@ public class AppiumUtils {
         return price;
     }
 
-
-
-
     public List<HashMap<String, String>> getJsonData(String jsonFilePath) throws IOException {
         String jsonContent = FileUtils.readFileToString(new File(jsonFilePath), StandardCharsets.UTF_8);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -46,25 +35,47 @@ public class AppiumUtils {
         return data;
     }
 
+//    public AppiumDriverLocalService startAppiumServer(String ipAddress, int port){
+//        service = new AppiumServiceBuilder()
+//                //Appium code --> Appium server --> mobile.
+//                .withAppiumJS(new File("C://Users//hp//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
+//                .withIPAddress(ipAddress)
+//                .usingPort(port)
+//                .build();
+//        service.start();
+//        return service;
+//    }
+public AppiumDriverLocalService startAppiumServer(String ipAddress, int port){
+    System.out.println("Starting Appium Server...");
+    service = new AppiumServiceBuilder()
+            .withAppiumJS(new File("C://Users//hp//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
+            .withIPAddress(ipAddress)
+            .usingPort(port)
+            .build();
+    service.start();
 
-    public AppiumDriverLocalService startAppiumServer(String ipAddress, int port){
-        service = new AppiumServiceBuilder()
-                //Appium code --> Appium server --> mobile.
-                .withAppiumJS(new File("C://Users//hp//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
-                .withIPAddress(ipAddress)
-                .usingPort(port)
-                .build();
-
-        service.start();
-        return service;
-
+    if (service.isRunning()) {
+        System.out.println("Appium Server is running");
+    } else {
+        System.out.println("Failed to start Appium Server");
     }
 
+    return service;
+}
 
 
     public void waitForElementToAppear(WebElement ele, AppiumDriver driver){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.attributeContains((ele),"text","Cart"));
     }
+
+    public String getScreenshotPath(String testCaseName, AppiumDriver driver) throws IOException {
+        File source = driver.getScreenshotAs(OutputType.FILE);
+        String destinationFile = System.getProperty("user.dir")+"//reports//"+testCaseName+".png";
+        FileUtils.copyFile(source, new File(destinationFile));
+        return destinationFile;
+    }
+
+
 }
 

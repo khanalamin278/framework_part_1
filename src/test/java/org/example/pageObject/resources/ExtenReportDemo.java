@@ -5,14 +5,12 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.Test;
 
 public class ExtenReportDemo {
-     static ExtentReports extent;
+    static ExtentReports extent;
 
-    @Test
     public static ExtentReports getExtentReports() {
-        String path = System.getProperty("user.dir")+"//reports//index.html";
+        String path = System.getProperty("user.dir") + "//reports//index.html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(path);
         reporter.config().setReportName("Web Automation Results");
         reporter.config().setDocumentTitle("Text Results");
@@ -23,10 +21,9 @@ public class ExtenReportDemo {
         return extent;
     }
 
-    @Test
-    public void initialDemo(){
+    public void initialDemo() {
         ExtentTest text = extent.createTest("Initial Demo");
-        System.setProperty("webdriver.chrom.driver", "c://chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.foodpanda.com.bd/");
         System.out.println(driver.getTitle());
@@ -36,6 +33,7 @@ public class ExtenReportDemo {
         extent.flush();
     }
 }
+
 
 /*
 public class ExtenReportDemo {

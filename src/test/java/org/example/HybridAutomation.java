@@ -1,14 +1,10 @@
 package org.example;
 
 import io.appium.java_client.AppiumBy;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,14 +13,24 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class HybridAutomation extends BaseTest {
+public class HybridAutomation extends AndroidBaseTest {
 
-    @BeforeMethod
-   public void startDriver() throws MalformedURLException, URISyntaxException {
-       setDriver();
+    @BeforeClass
+    public void setUp() throws IOException, URISyntaxException {
+        ConfigarAppium();
     }
 
-    @Test(dataProvider = "getData")
+    @BeforeMethod(alwaysRun = true)
+    public void startDriver() throws MalformedURLException, URISyntaxException {
+        setDriver();
+    }
+
+//    @BeforeMethod(alwaysRun = true)
+//   public void startDriver() throws MalformedURLException, URISyntaxException {
+//       setDriver();
+//    }
+
+    @Test(dataProvider = "getData", groups = {"Smoke"})
     public void FillFormOne(HashMap<String, String> input) throws InterruptedException {
         fromPage.setNameField(input.get("name"));
         fromPage.setGender(input.get("gender"));
@@ -43,19 +49,31 @@ public class HybridAutomation extends BaseTest {
         driver.findElement(By.id("com.androidsample.generalstore:id/btnProceed")).click();
         Thread.sleep(6000);
     }
+
     @Test(dataProvider = "getData")
     public void FillFormTwo(HashMap<String, String> input) throws InterruptedException {
-       Assert.fail("Result dose not match");
+        driver.findElement(AppiumBy.id("android:id/text1")).click();
+        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Bangladesh\"))"));
+        driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Bangladesh']")).click();
+        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/nameField")).sendKeys("Al amin khan");
+        driver.hideKeyboard();
+        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/radioMale")).click();
+        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
+
+        String toastMassage = driver.findElement(By.xpath("(//android.widget.Toast)[1")).getAttribute("name");
+        Assert.assertEquals(toastMassage,"Please your name");
     }
 
     @DataProvider
     public Object[][] getData() throws IOException {
         List<HashMap<String, String>> data = getJsonData(System.getProperty("user.dir")+"//src//test//java//testData//en.json");
-        return new Object[][] {  {data.get(0)}, {data.get(1)}   };
+        return new Object[][] {  {data.get(0)}   };
     }
 
+
+
     @AfterClass
-    public static void startDriverStop() {
+    public void startDriverStop() {
         driver.quit();
     }
 

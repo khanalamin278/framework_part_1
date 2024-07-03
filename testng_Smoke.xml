@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <groups>
+        <run>
+            <include name="Smoke"/>
+        </run>
+    </groups>
+
+<listeners>
+    <listener class-name="org.example.pageObject.resources.Listeners"/>
+</listeners>
+
+    <test verbose="2" preserve-order="true" name="C:/Programming/QaWorks/framework_part_1">
+        <classes>
+            <class name="org.example.HybridAutomation">
+                <methods>
+                    <include name="FillFormOne"/>
+                    <include name="FillFormTwo"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

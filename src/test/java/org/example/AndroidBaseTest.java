@@ -19,17 +19,17 @@ import java.time.Duration;
 import java.util.Properties;
 
 
-public class BaseTest extends AppiumUtils {
+public class AndroidBaseTest extends AppiumUtils {
 
 
-    public static AndroidDriver driver;
+    public AndroidDriver driver;
     public static AppiumDriverLocalService service;
     public FromPage fromPage;
 
 
-
-    @BeforeClass //
+    @BeforeClass
     public void ConfigarAppium() throws IOException, URISyntaxException {
+        System.out.println("ConfigarAppium is called");
         Properties prop = new Properties();
         FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//resources//data.properties");
 
@@ -37,11 +37,33 @@ public class BaseTest extends AppiumUtils {
         String ipAddress = prop.getProperty("ipAddress");
         String port = prop.getProperty("port");
 
+        System.out.println("Starting Appium server on IP: " + ipAddress + " Port: " + port);
+
         service = startAppiumServer(ipAddress, Integer.parseInt(port));
 
+        if (service == null) {
+            System.out.println("Appium server could not be started. Service is null.");
+        } else {
+            System.out.println("Appium server started at: " + service.getUrl());
+        }
     }
 
-    public void setDriver() throws MalformedURLException, URISyntaxException {
+//    @BeforeClass
+//    public void ConfigarAppium() throws IOException, URISyntaxException {
+//        System.out.println("ConfigarAppium is called");
+//        Properties prop = new Properties();
+//        FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//resources//data.properties");
+//
+//        prop.load(fis);
+//        String ipAddress = prop.getProperty("ipAddress");
+//        String port = prop.getProperty("port");
+//
+//        service = startAppiumServer(ipAddress, Integer.parseInt(port));
+//        System.out.println("Appium server started at: " + service.getUrl());
+//
+//    }
+
+    public void setDriver() throws MalformedURLException, URISyntaxException{
         Properties prop = new Properties();
         UiAutomator2Options options = new UiAutomator2Options();
 
