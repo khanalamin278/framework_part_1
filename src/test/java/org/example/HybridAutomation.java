@@ -62,7 +62,7 @@ public class HybridAutomation extends AndroidBaseTest {
         driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
 
         String toastMassage = driver.findElement(By.xpath("(//android.widget.Toast)[1")).getAttribute("name");
-        Assert.assertEquals(toastMassage,"Please your name");
+        Assert.assertEquals(toastMassage,"Please enter your name");
     }
 
     @DataProvider

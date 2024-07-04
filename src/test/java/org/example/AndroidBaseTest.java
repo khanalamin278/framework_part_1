@@ -53,8 +53,9 @@ public class AndroidBaseTest extends AppiumUtils {
         Properties prop = new Properties();
         FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"//src//test//java//org//example//pageObject//resources//data.properties");
 
+        String ipAddress = System.getProperty("ipAddress")!=null ? System.getProperty("ipAddress") : prop.getProperty("ipAddress");
         prop.load(fis);
-        String ipAddress = prop.getProperty("ipAddress");
+        //String ipAddress = prop.getProperty("ipAddress");
         String port = prop.getProperty("port");
 
         service = startAppiumServer(ipAddress, Integer.parseInt(port));
