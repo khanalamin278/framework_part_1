@@ -50,20 +50,40 @@ public class HybridAutomation extends AndroidBaseTest {
         driver.findElement(By.id("com.androidsample.generalstore:id/btnProceed")).click();
         Thread.sleep(6000);
     }
-
     @Test(dataProvider = "getData")
     public void FillFormTwo(HashMap<String, String> input) throws InterruptedException {
-        driver.findElement(AppiumBy.id("android:id/text1")).click();
-        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Bangladesh\"))"));
-        driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Bangladesh']")).click();
-        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/nameField")).sendKeys("Al amin khan");
-        driver.hideKeyboard();
-        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/radioMale")).click();
-        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
-
-        String toastMassage = driver.findElement(By.xpath("(//android.widget.Toast)[1")).getAttribute("name");
-        Assert.assertEquals(toastMassage,"Please enter your name");
+        fromPage.setNameField(input.get("name"));
+        fromPage.setGender(input.get("gender"));
+        fromPage.setCountrySelection(input.get("country"));
+        ProductCatalogue productCatalogue = fromPage.submitFrom();
+        productCatalogue.addItemCartByIndex(0);
+        CartPage cartPage = productCatalogue.goToCartPage();
+        double totalSum = cartPage.getProductSum();
+        double displayFormattedSum = cartPage.getTotalAmountDisplayed();
+        Assert.assertEquals(totalSum , displayFormattedSum);
+        WebElement ele = driver.findElement(By.id("com.androidsample.generalstore:id/termsButton"));
+        longPressAction(ele);
+        driver.findElement(By.id("android:id/button1")).click();
+        driver.findElement(AppiumBy.className("android.widget.CheckBox")).click();
+        driver.findElement(By.id("com.androidsample.generalstore:id/btnProceed")).click();
+        Thread.sleep(6000);
     }
+
+
+
+//    @Test(dataProvider = "getData")
+//    public void FillFormTwo(HashMap<String, String> input) throws InterruptedException {
+//        driver.findElement(AppiumBy.id("android:id/text1")).click();
+//        driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Bangladesh\"))"));
+//        driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Bangladesh']")).click();
+//        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/nameField")).sendKeys("Al amin khan");
+//        driver.hideKeyboard();
+//        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/radioMale")).click();
+//        driver.findElement(AppiumBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
+//
+//        String toastMassage = driver.findElement(By.xpath("(//android.widget.Toast)[1")).getAttribute("name");
+//        Assert.assertEquals(toastMassage,"Please enter your name");
+//    }
 
     @DataProvider
     public Object[][] getData() throws IOException {
